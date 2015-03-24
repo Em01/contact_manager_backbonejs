@@ -17,3 +17,7 @@
 			photo: "/img/placeholder.png"
 		}
 	});
+
+	var Directory = Backbone.Collection.extend({
+		model: Contact
+	});
