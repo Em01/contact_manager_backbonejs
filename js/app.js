@@ -21,3 +21,16 @@
 	var Directory = Backbone.Collection.extend({
 		model: Contact
 	});
+
+	var ContactView = Backbone.View.extend({
+		tageName: "article",
+		className: "contact-container",
+		template: $("#contactTemplate").html(),
+
+		render: function () {
+			var tmpl = _.template(this.template);
+
+			this.$el.html(tmpl(this.model.toJSON()));
+			return this;
+		}
+	});
