@@ -130,4 +130,10 @@
     //create instance of master view
     var directory = new DirectoryView();
 
+    //create an instance of the router instance
+    var ContactsRouter = new ContactsRouter();
+
+    //Start history service
+    Backbone.history.start();
+
 } (jQuery));
