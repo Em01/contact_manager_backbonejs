@@ -47,6 +47,9 @@
 
             this.render();
             this,$el.find("#filter").append(this.createSelect());
+
+            this.on("change:filterType", this.filterByType, this);
+            this.collection.on("reset", this.render, this);
         },
 
         render: function () {
@@ -81,9 +84,48 @@
        					text: item.toLowerCase(),
        				}).appendTo(select);
        		});
+
        		return select;
-       	}
-    });
+
+       	},
+  	//add ui events
+  	events: {
+  		"change #filter select": "setFilter"
+  	},
+
+  	//Set the filter property and fire change event
+  	setFilter: function (e) {
+  		this.filter.Type = e.currentTarget.Value;
+  		this.trigger("change:filterType");
+  	},
+
+  	//filter the view
+  	filterByType: function () {
+  		if (this.filterType === "all") {
+  			this.collection.reset(contacts);
+  		} else {
+  			this.collection.reset(contacts, { silent: true });
+
+  			var filterType = this.filterType,
+  				filtered= _.filter(this.collection.models, function (item) {
+  				return item.get("type").toLowerCase() === filterType;
+  			});
+
+  			this.collection.reset(filtered);
+  		}
+  	}
+
+  	//add routing
+  var ContactsRouter = Backbone.Router.extend({
+  	routes: {
+  		"filter/:type": "urlFilter"
+  	},
+
+  	urlFilter: function (type) {
+  		directory.filterType = type;
+  		directory.trigger("change:filterType");
+  	}
+  });
 
     //create instance of master view
     var directory = new DirectoryView();
